@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+<<<<<<< Updated upstream
 
   // Configure CORS
   app.enableCors({
@@ -20,3 +21,8 @@ async function bootstrap() {
 }
 
 bootstrap();
+=======
+  await app.listen(3001);
+}
+bootstrap();
+>>>>>>> Stashed changes

@@ -12,10 +12,10 @@ RUN npm install
 COPY . .
 
 # Build the application
-RUN npm run build
+# RUN npm run build
 
 # Expose port
 EXPOSE 3001
 
 # Start command
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:dev"]

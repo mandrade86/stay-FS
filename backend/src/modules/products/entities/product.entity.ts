@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+<<<<<<< Updated upstream
 import { Document, Types } from 'mongoose';
 
 export enum ProductCategory {
@@ -38,3 +39,19 @@ export class Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+=======
+import { Document } from 'mongoose';
+
+export type ProductDocument = Product & Document
+
+@Schema({ timestamps: true})
+export class Product {
+  @Prop({ required: true, })
+  name: string
+
+  @Prop({ required: true, })
+  price: number
+}
+
+export const ProductSchema = SchemaFactory.createForClass(Product)
+>>>>>>> Stashed changes

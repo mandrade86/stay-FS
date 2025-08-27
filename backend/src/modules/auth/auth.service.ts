@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, BadRequestException, ConflictExcepti
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import bcrypt from "bcryptjs";
 
 import { User, UserDocument } from '../users/entities/user.entity';
 import { LoginDto, RegisterDto, ChangePasswordDto } from './dto/auth.dto';
@@ -23,7 +24,7 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userModel.findOne({ email }).exec();
     
-    if (user && await user.validatePassword(password)) {
+    if (user && bcrypt.compare(user.password, password)) {
       return user;
     }
     
@@ -100,56 +101,56 @@ export class AuthService {
     };
   }
 
-  async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<{ message: string }> {
-    const user = await this.userModel.findById(userId).exec();
+  // async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<{ message: string }> {
+  //   const user = await this.userModel.findById(userId).exec();
     
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
+  //   if (!user) {
+  //     throw new UnauthorizedException('User not found');
+  //   }
 
-    // Verify current password
-    const isCurrentPasswordValid = await user.validatePassword(changePasswordDto.currentPassword);
-    if (!isCurrentPasswordValid) {
-      throw new BadRequestException('Current password incorrect');
-    }
+  //   // Verify current password
+  //   const isCurrentPasswordValid = await user.validatePassword(changePasswordDto.currentPassword);
+  //   if (!isCurrentPasswordValid) {
+  //     throw new BadRequestException('Current password incorrect');
+  //   }
 
-    // Verify new passwords match
-    if (changePasswordDto.newPassword !== changePasswordDto.confirmNewPassword) {
-      throw new BadRequestException('New passwords do not match');
-    }
+  //   // Verify new passwords match
+  //   if (changePasswordDto.newPassword !== changePasswordDto.confirmNewPassword) {
+  //     throw new BadRequestException('New passwords do not match');
+  //   }
 
-    // Update password
-    user.password = changePasswordDto.newPassword;
-    await user.save();
+  //   // Update password
+  //   user.password = changePasswordDto.newPassword;
+  //   await user.save();
 
-    return { message: 'Password updated successfully' };
-  }
+  //   return { message: 'Password updated successfully' };
+  // }
 
-  async getProfile(userId: string) {
-    const user = await this.userModel.findById(userId, { password: 0 }).exec();
+  // async getProfile(userId: string) {
+  //   const user = await this.userModel.findById(userId, { password: 0 }).exec();
     
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
+  //   if (!user) {
+  //     throw new UnauthorizedException('User not found');
+  //   }
 
-    return user;
-  }
+  //   return user;
+  // }
 
-  async refreshToken(userId: string) {
-    const user = await this.userModel.findById(userId).exec();
+  // async refreshToken(userId: string) {
+  //   const user = await this.userModel.findById(userId).exec();
     
-    if (!user || !user.isActive) {
-      throw new UnauthorizedException('Invalid user');
-    }
+  //   if (!user || !user.isActive) {
+  //     throw new UnauthorizedException('Invalid user');
+  //   }
 
-    const payload: JwtPayload = {
-      sub: user._id.toString(),
-      email: user.email,
-      role: user.role,
-    };
+  //   const payload: JwtPayload = {
+  //     sub: user._id.toString(),
+  //     email: user.email,
+  //     role: user.role,
+  //   };
 
-    const accessToken = this.jwtService.sign(payload);
+  //   const accessToken = this.jwtService.sign(payload);
 
-    return { accessToken };
-  }
+  //   return { accessToken };
+  // }
 }

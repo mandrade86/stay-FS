@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+<<<<<<< Updated upstream
 import { Document, Types } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
@@ -46,3 +47,28 @@ UserSchema.pre('save', async function(next) {
   }
   next();
 });
+=======
+import { Document } from 'mongoose';
+
+export type UserDocument = User & Document
+
+@Schema({ timestamps: true})
+export class User {
+  @Prop({ required: false, })
+  _id: string
+
+  @Prop({ required: true, })
+  email: string
+
+  @Prop({ required: true, })
+  password: string
+
+  @Prop({ required: true, })
+  fullName: string
+
+  @Prop({ required: false, })
+  role: string
+}
+
+export const UserSchema = SchemaFactory.createForClass(User)
+>>>>>>> Stashed changes

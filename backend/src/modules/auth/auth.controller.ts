@@ -31,35 +31,4 @@ export class AuthController {
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
-
-  @Get('profile')
-  async getProfile(@Request() req) {
-    // Simple token validation
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    if (!token) {
-      throw new Error('No token provided');
-    }
-    return this.authService.getProfile(token);
-  }
-
-  @Put('change-password')
-  async changePassword(
-    @Request() req,
-    @Body() changePasswordDto: ChangePasswordDto,
-  ) {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    if (!token) {
-      throw new Error('No token provided');
-    }
-    return this.authService.changePassword(token, changePasswordDto);
-  }
-
-  @Post('refresh')
-  async refreshToken(@Request() req) {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    if (!token) {
-      throw new Error('No token provided');
-    }
-    return this.authService.refreshToken(token);
-  }
 }

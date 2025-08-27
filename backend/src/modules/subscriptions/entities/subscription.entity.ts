@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+<<<<<<< Updated upstream
 export enum SubscriptionStatus {
   ACTIVE = 'active',
   PAUSED = 'paused',
@@ -55,3 +56,17 @@ export class Subscription {
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(Subscription);
+=======
+export type SubscriptionDocument = Subscription & Document
+
+@Schema({ timestamps: true})
+export class Subscription {
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: string
+
+  @Prop({ type: Types.ObjectId, ref: 'Product' })
+  productId: number
+}
+
+export const SubscriptionSchema = SchemaFactory.createForClass(Subscription)
+>>>>>>> Stashed changes
