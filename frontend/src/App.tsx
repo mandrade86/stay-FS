@@ -1,19 +1,22 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, Container } from '@mui/material';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Box, Container } from "@mui/material";
 
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Layout from './components/Layout';
-import Login from './pages/Login';
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Registration from "./pages/Registration";
 
 // Protected Route Component
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -24,14 +27,24 @@ const AppRoutes: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Routes>
-        <Route path="/login" element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Login />
-        } />
-        <Route path="/" element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        } />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
+        />
+        <Route
+          path="/registration"
+          element={
+            isAuthenticated ? <Navigate to="/" replace /> : <Registration />
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Container>
@@ -42,7 +55,7 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
         <AppRoutes />
       </Box>
     </AuthProvider>

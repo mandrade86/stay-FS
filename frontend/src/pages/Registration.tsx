@@ -9,16 +9,16 @@ import {
   Box,
   Alert,
 } from "@mui/material";
+import Login from "./Login";
 
-import { useAuth } from "../contexts/AuthContext";
-
-const Login: React.FC = () => {
+const Registration: React.FC = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,24 +34,27 @@ const Login: React.FC = () => {
       }
 
       // Call the real API endpoint
-      const response = await fetch("http://localhost:3001/api/auth/login", {
+      const response = await fetch("http://localhost:3001/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          fullName: name,
+          email,
+          password,
+          confirmPassword,
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        throw new Error(errorData.message || "Registration failed");
       }
 
-      const { user, token } = await response.json();
-      login(user, token);
-      navigate("/");
+      navigate("/login");
     } catch (err) {
-      setError("An error occurred during login");
+      setError("An error occurred during Registration");
     } finally {
       setIsLoading(false);
     }
@@ -69,25 +72,22 @@ const Login: React.FC = () => {
       >
         <Paper elevation={3} sx={{ p: 4, width: "100%" }}>
           <Typography component="h1" variant="h4" align="center" gutterBottom>
-            Login
+            Registration
           </Typography>
-
-          <Typography
-            variant="body2"
-            align="center"
-            color="text.secondary"
-            sx={{ mb: 3 }}
-          >
-            Sign in to your subscription account
-          </Typography>
-
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
 
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              autoComplete="name"
+              autoFocus
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
             <TextField
               margin="normal"
               required
@@ -112,6 +112,18 @@ const Login: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="confirmPassword"
+              type="password"
+              id="confirmPassword"
+              autoComplete="current-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
             <Button
               type="submit"
               fullWidth
@@ -119,7 +131,7 @@ const Login: React.FC = () => {
               sx={{ mt: 3, mb: 2 }}
               disabled={isLoading}
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isLoading ? "Signup In..." : "Signup In"}
             </Button>
 
             <Typography
@@ -137,4 +149,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Registration;

@@ -10,11 +10,11 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
 @Module({
   imports: [
     // MongoDB configuration
-    MongooseModule.forRoot('mongodb://localhost:27017/subscription_db'),
+    MongooseModule.forRoot('mongodb://mongodb:27017/subscription_db'),
 
     // JWT configuration
     JwtModule.register({
-      secret: 'secret-key',
+      secret: '123456789abcdef',
       signOptions: { expiresIn: '1h' },
     }),
 

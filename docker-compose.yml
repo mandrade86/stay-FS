@@ -26,12 +26,12 @@ services:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongodb:27017/subscription_db
       - MONGODB_DATABASE=subscription_db
-      - JWT_SECRET=your-super-secret-jwt-key-here
+      - JWT_SECRET=123456789abcdef
       - JWT_EXPIRES_IN=24h
     depends_on:
       - mongodb
     volumes:
-      - ./backend:/app
+      - ./backend/src:/app/src
       - /app/node_modules
     networks:
       - subscription_network
